@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>داشبورد ادمین - پورتال استاد محمودی</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-light">
+  <div class="neon-clock" id="neonClock"></div>
+
+  <header class="header">
+    <div>
+      <h2>داشبورد ادمین</h2>
+      <p>خوش آمدید استاد محمودی عزیز ✨</p>
+    </div>
+    <button class="btn-outline" onclick="logout()">خروج</button>
+  </header>
+
+  <main class="admin-layout">
+    <section class="card">
+      <h3>ایجاد کاربر جدید</h3>
+      <form id="createUserForm">
+        <div class="form-group">
+          <label>یوزرنیم دانشجو</label>
+          <input type="text" id="newUsername" required />
+        </div>
+        <div class="form-group">
+          <label>رمز عبور</label>
+          <input type="text" id="newPassword" required />
+        </div>
+        <button type="submit" class="btn-primary">ثبت کاربر</button>
+        <p id="createUserMsg" class="message"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h3>ثبت / ویرایش نمرات</h3>
+      <form id="gradesForm">
+        <div class="form-group">
+          <label>یوزرنیم دانشجو</label>
+          <input type="text" id="gradeUsername" placeholder="مثلاً: ali123" required />
+        </div>
+        <div class="form-group">
+          <label>نمره میان‌ترم</label>
+          <input type="number" step="0.01" id="midterm" />
+        </div>
+        <div class="form-group">
+          <label>نمره پایان‌ترم</label>
+          <input type="number" step="0.01" id="final" />
+        </div>
+        <div class="form-group">
+          <label>نمره کلاسی</label>
+          <input type="number" step="0.01" id="classwork" />
+        </div>
+        <button type="submit" class="btn-primary">ثبت نمرات</button>
+        <p id="gradesMsg" class="message"></p>
+      </form>
+    </section>
+
+    <section class="card full-width">
+      <h3>لیست کاربران</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>یوزرنیم</th>
+            <th>نقش</th>
+            <th>میان‌ترم</th>
+            <th>پایان‌ترم</th>
+            <th>کلاسی</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (!currentUser || currentUser.role !== 'admin') {
+      window.location.href = 'index.html';
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'index.html';
+    }
+
+    async function loadUsers() {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = '';
+      try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        users.forEach(u => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${u.username}</td>
+            <td>${u.role === 'admin' ? 'ادمین' : 'دانشجو'}</td>
+            <td>${u.grades?.midterm ?? '-'}</td>
+            <td>${u.grades?.final ?? '-'}</td>
+            <td>${u.grades?.classwork ?? '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadUsers();
+
+    const createUserForm = document.getElementById('createUserForm');
+    const createUserMsg = document.getElementById('createUserMsg');
+
+    createUserForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      createUserMsg.textContent = '';
+
+      const username = document.getElementById('newUsername').value.trim();
+      const password = document.getElementById('newPassword').value.trim();
+
+      try {
+        const res = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, role: 'student' })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          createUserMsg.textContent = data.message || 'خطا در ایجاد کاربر.';
+          createUserMsg.classList.add('error');
+          return;
+        }
+
+        createUserMsg.textContent = data.message;
+        createUserMsg.classList.remove('error');
+        createUserMsg.classList.add('success');
+        createUserForm.reset();
+        loadUsers();
+      } catch (err) {
+        createUserMsg.textContent = 'مشکلی در ارتباط با سرور پیش آمد.';
+        createUserMsg.classList.add('error');
+      }
+    });
+
+    const gradesForm = document.getElementById('gradesForm');
+    const gradesMsg = document.getElementById('gradesMsg');
+
+    gradesForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      gradesMsg.textContent = '';
+
+      const username = document.getElementById('gradeUsername').value.trim();
+      const midterm = document.getElementById('midterm').value;
+      const final = document.getElementById('final').value;
+      const classwork = document.getElementById('classwork').value;
+
+      try {
+        const res = await fetch('/api/grades', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            midterm: midterm ? Number(midterm) : null,
+            final: final ? Number(final) : null,
+            classwork: classwork ? Number(classwork) : null
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          gradesMsg.textContent = data.message || 'خطا در ثبت نمرات.';
+          gradesMsg.classList.add('error');
+          return;
+        }
+
+        gradesMsg.textContent = data.message;
+        gradesMsg.classList.remove('error');
+        gradesMsg.classList.add('success');
+        loadUsers();
+      } catch (err) {
+        gradesMsg.textContent = 'مشکلی در ارتباط با سرور پیش آمد.';
+        gradesMsg.classList.add('error');
+      }
+    });
+  </script>
+</body>
+</html>
+

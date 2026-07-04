@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>پنل دانشجو - پورتال استاد محمودی</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-light">
+  <div class="neon-clock" id="neonClock"></div>
+
+  <header class="header">
+    <div>
+      <h2>پنل دانشجو</h2>
+      <p id="welcomeText"></p>
+    </div>
+    <button class="btn-outline" onclick="logout()">خروج</button>
+  </header>
+
+  <main class="student-layout">
+    <section class="card">
+      <h3>نمرات شما</h3>
+      <div class="grades-grid">
+        <div class="grade-card">
+          <h4>میان‌ترم</h4>
+          <p id="midtermGrade">-</p>
+        </div>
+        <div class="grade-card">
+          <h4>پایان‌ترم</h4>
+          <p id="finalGrade">-</p>
+        </div>
+        <div class="grade-card">
+          <h4>نمره کلاسی</h4>
+          <p id="classworkGrade">-</p>
+        </div>
+        <div class="grade-card total">
+          <h4>نمره نهایی تقریبی</h4>
+          <p id="totalGrade">-</p>
+        </div>
+      </div>
+      <p class="note">
+        * این نمره نهایی صرفاً نمایشی است؛ فرمول واقعی قابل تنظیم توسط استاد است.
+      </p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (!currentUser || currentUser.role !== 'student') {
+      window.location.href = 'index.html';
+    }
+
+    document.getElementById('welcomeText').textContent =
+      `سلام ${currentUser.username}، اینجا قلمرو نمرات توست 🎓`;
+
+    const midterm = currentUser.grades?.midterm ?? null;
+    const final = currentUser.grades?.final ?? null;
+    const classwork = currentUser.grades?.classwork ?? null;
+
+    document.getElementById('midtermGrade').textContent = midterm ?? '-';
+    document.getElementById('finalGrade').textContent = final ?? '-';
+    document.getElementById('classworkGrade').textContent = classwork ?? '-';
+
+    function calcTotal(m, f, c) {
+      if (m == null || f == null || c == null) return '-';
+      const total = m * 0.3 + f * 0.5 + c * 0.2;
+      return total.toFixed(2);
+    }
+
+    document.getElementById('totalGrade').textContent = calcTotal(midterm, final, classwork);
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
+

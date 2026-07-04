@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>پورتال استاد محمودی - ورود</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-light">
+  <div class="neon-clock" id="neonClock"></div>
+
+  <div class="login-container">
+    <div class="login-card">
+      <h1 class="portal-title">پورتال استاد محمودی</h1>
+      <p class="portal-subtitle"> </p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label>نام کاربری</label>
+          <input type="text" id="username" placeholder="مثلاً: Mohadse " required />
+        </div>
+
+        <div class="developer-signature">
+        developer by : <span>Viros666</span> | telegram: <span>@Viros666</span>
+    </div>
+
+
+
+        <div class="form-group">
+          <label>رمز عبور</label>
+          <input type="password" id="password" placeholder="Mohadse5060" required />
+        </div>
+
+        <button type="submit" class="btn-primary">ورود به پورتال</button>
+        <p id="loginMessage" class="message"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const msg = document.getElementById('loginMessage');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = '';
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          msg.textContent = data.message || 'خطا در ورود.';
+          msg.classList.add('error');
+          return;
+        }
+
+        const data = await res.json();
+        localStorage.setItem('currentUser', JSON.stringify(data));
+
+        if (data.role === 'admin') {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = 'student.html';
+        }
+      } catch (err) {
+        msg.textContent = 'مشکلی در ارتباط با سرور پیش آمد.';
+        msg.classList.add('error');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Vazirmatn', sans-serif;
+  background: #f5f7fb;
+  color: #1c1c28;
+  direction: rtl;
+}
+
+.theme-light {
+  background: radial-gradient(circle at top left, #ffffff, #f1f3ff);
+}
+
+/* ساعت نئونی */
+.neon-clock {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  padding: 10px 20px;
+  background: #0b0b14;
+  color: #b784ff;
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  box-shadow:
+    0 0 10px rgba(178, 132, 255, 0.8),
+    0 0 25px rgba(178, 132, 255, 0.6);
+  border: 1px solid rgba(178, 132, 255, 0.7);
+  text-shadow:
+    0 0 5px #b784ff,
+    0 0 10px #8f5bff;
+  z-index: 999;
+}
+
+/* صفحه لاگین */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px 28px 36px;
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(150, 150, 200, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  inset: -80px;
+  background:
+    radial-gradient(circle at top right, rgba(183, 132, 255, 0.28), transparent 55%),
+    radial-gradient(circle at bottom left, rgba(132, 209, 255, 0.25), transparent 55%);
+  opacity: 0.8;
+  z-index: -1;
+}
+
+.portal-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #3a206e;
+  text-shadow:
+    0 0 8px rgba(183, 132, 255, 0.8),
+    0 0 15px rgba(183, 132, 255, 0.7);
+}
+
+.portal-subtitle {
+  margin: 8px 0 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #333;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #d3d7f0;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+input:focus {
+  border-color: #b784ff;
+  box-shadow:
+    0 0 0 1px rgba(183, 132, 255, 0.5),
+    0 0 10px rgba(183, 132, 255, 0.4);
+}
+
+/* دکمه‌ها */
+.btn-primary {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #b784ff, #8f5bff);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow:
+    0 10px 25px rgba(143, 91, 255, 0.45),
+    0 0 12px rgba(183, 132, 255, 0.9);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:
+    0 14px 30px rgba(143, 91, 255, 0.6),
+    0 0 18px rgba(183, 132, 255, 1);
+}
+
+.btn-outline {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #b784ff;
+  background: #fff;
+  color: #6a3fb5;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: #f3e9ff;
+}
+
+/* پیام‌ها */
+.message {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.message.error {
+  color: #d03150;
+}
+
+.message.success {
+  color: #1f9b47;
+}
+
+/* هدر مشترک */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px 8px;
+}
+
+/* layout ادمین */
+.admin-layout {
+  padding: 0 40px 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-gap: 18px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 18px 20px;
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(150, 150, 200, 0.12);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 16px;
+  color: #3a206e;
+}
+
+.card.full-width {
+  grid-column: 1 / -1;
+}
+
+/* جدول کاربران */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th,
+.table td {
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.table thead {
+  background: #f3f0ff;
+}
+
+.table tbody tr:nth-child(even) {
+  background: #faf9ff;
+}
+
+/* layout دانشجو */
+.student-layout {
+  padding: 0 40px 40px;
+}
+
+.grades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-gap: 14px;
+}
+
+.grade-card {
+  background: #f9f9ff;
+  border-radius: 16px;
+  padding: 12px 12px 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.grade-card h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #5c4a99;
+}
+
+.grade-card p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2e2e3a;
+}
+
+.grade-card.total {
+  background: #3a206e;
+  color: #fff;
+}
+
+.grade-card.total h4,
+.grade-card.total p {
+  color: #fff;
+}
+
+.grade-card::before {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  background:
+    radial-gradient(circle at top right, rgba(183, 132, 255, 0.25), transparent 60%);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.note {
+  font-size: 12px;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  .header {
+    padding: 16px 16px 8px;
+  }
+  .admin-layout,
+  .student-layout {
+    padding: 0 16px 24px;
+  }
+}
+
+.developer-signature {
+    position: fixed;
+    bottom: 10px;        /* کمی فاصله بیشتر برای نفس کشیدن */
+    right: 12px;
+    font-size: 12px;     /* این رو بزرگ‌تر کردیم */
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #6a1bff;      /* بنفش کمی پررنگ‌تر */
+    opacity: 0.85;       /* واضح‌تر، اما نه ۱۰۰٪ */
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 5px 10px;   /* پدینگ بیشتر → باکس مرتب‌تر */
+    border-radius: 6px;
+    box-shadow: 0 0 6px rgba(106, 27, 255, 0.4);
+    border: 1px solid rgba(106, 27, 255, 0.35);
+    backdrop-filter: blur(4px);
+}
+
+.developer-signature span {
+    font-weight: 700;
+    text-shadow: 0 0 4px rgba(106, 27, 255, 0.8);
+}
